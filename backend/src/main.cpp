@@ -188,9 +188,6 @@ int main() {
     std::cout << " Bank Account Inheritance and Polymorphism System\n";
     std::cout << " C++17 Backend Server running at: http://localhost:8080\n";
     std::cout << "=========================================================\n";
-
-        const char* envPort = std::getenv("PORT");
-    int port = envPort ? std::stoi(envPort) : 8080;
     const char* envPort = std::getenv("PORT");
     int serverPort = (envPort && *envPort) ? std::stoi(envPort) : 8080;
     std::cout << "Binding BANKORA C++17 Server on 0.0.0.0:" << serverPort << std::endl;
@@ -200,7 +197,3 @@ int main() {
     }
     return 0;
 }
-
-
-
-
