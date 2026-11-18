@@ -1,0 +1,652 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BANKORA — Bank Account Inheritance and Polymorphism System</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <!-- Ambient Animated Background Orbs -->
+  <div class="ambient-canvas">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="grid-overlay"></div>
+  </div>
+
+    <!-- Executive C++ Authenticated Login Gate -->
+  <div id="loginGate" class="login-gate">
+    <div class="glass-card login-card" style="width:450px;">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+        <svg width="42" height="42" viewBox="0 0 40 40" fill="none">
+          <defs>
+            <linearGradient id="loginGrad" x1="0" y1="0" x2="40" y2="40" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="#38bdf8"/>
+              <stop offset="50%" stop-color="#2563eb"/>
+              <stop offset="100%" stop-color="#6366f1"/>
+            </linearGradient>
+          </defs>
+          <rect width="40" height="40" rx="12" fill="url(#loginGrad)"/>
+          <path d="M20 8L30 13.5V16H10V13.5L20 8Z" fill="white"/>
+          <rect x="12.5" y="18" width="2.8" height="9" rx="1" fill="white" fill-opacity="0.9"/>
+          <rect x="18.6" y="18" width="2.8" height="9" rx="1" fill="white" fill-opacity="0.9"/>
+          <rect x="24.7" y="18" width="2.8" height="9" rx="1" fill="white" fill-opacity="0.9"/>
+          <rect x="9.5" y="29" width="21" height="2.6" rx="1.3" fill="white"/>
+        </svg>
+        <div>
+          <div class="brand-name" style="font-size:20px;">BANKORA</div>
+          <div class="brand-sub">DIGITAL BANKING & CORE ENGINE</div>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px;background:rgba(6,11,22,0.8);padding:5px;border-radius:10px;border:1px solid rgba(56,189,248,0.16);">
+        <button type="button" id="tabSignInBtn" class="btn btn-primary btn-sm" onclick="switchAuthTab('signin')">Sign In</button>
+        <button type="button" id="tabSignUpBtn" class="btn btn-outline btn-sm" style="border:none;" onclick="switchAuthTab('signup')">New Customer Sign Up</button>
+      </div>
+
+      <div id="loginError" class="toast err hidden" style="margin-bottom:12px;"></div>
+
+      <form id="loginForm" class="form-stack" autocomplete="off">
+        <div class="form-group">
+          <label>Username</label>
+          <input type="text" id="loginUsername" class="input" placeholder="Enter your username" required />
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" id="loginPassword" autocomplete="new-password" class="input" placeholder="Enter your password" required />
+        </div>
+        <button type="submit" class="btn btn-primary btn-full">Sign In to BANKORA</button>
+
+        <div class="rule-block" style="margin-top:12px;">
+          <h4>Quick Access Demo Logins</h4>
+          <ul>
+            <li>Superior Officer: <code>officer</code> / <code>ADMIN2026</code></li>
+            <li>Bank Teller: <code>teller</code> / <code>BANK2026</code></li>
+            <li>Customer Portal: <code>sharmila</code> / <code>CUST2026</code></li>
+          </ul>
+        </div>
+      </form>
+
+      <form id="signupForm" class="form-stack hidden" autocomplete="off">
+        <div class="form-group">
+          <label>Your Full Name</label>
+          <input type="text" id="signupFullName" class="input" placeholder="e.g., Divya Krishnan" required />
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+          <div class="form-group">
+            <label>Choose Username</label>
+            <input type="text" id="signupUsername" class="input" placeholder="e.g., divya" required />
+          </div>
+          <div class="form-group">
+            <label>Create Password</label>
+            <input type="password" id="signupPassword" autocomplete="new-password" class="input" placeholder="Min 4 chars" required />
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Select Opening Account Type</label>
+          <select id="signupAccType" class="input" onchange="updateSignupDepositHint()">
+            <option value="SAVINGS">Savings Account (4.5% p.a. | Min Rs. 1,000)</option>
+            <option value="CURRENT">Current Account (Rs. 25,000 Overdraft)</option>
+            <option value="FD">Fixed Deposit (7.25% p.a. | Min Rs. 5,000)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label id="signupDepositLabel">Initial Deposit (Min Rs. 1,000)</label>
+          <input type="number" id="signupDeposit" class="input" value="2000" min="1" step="0.01" required />
+        </div>
+        <button type="submit" class="btn btn-primary btn-full">Create My Bank Account & Login</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="app-shell">
+    <!-- Left Navigation Rail -->
+    <aside class="sidebar">
+      <div>
+        <div class="brand">
+          <div class="brand-logo-svg">
+            <svg width="38" height="38" viewBox="0 0 40 40" fill="none">
+              <defs>
+                <linearGradient id="bankoraGrad" x1="0" y1="0" x2="40" y2="40" gradientUnits="userSpaceOnUse">
+                  <stop offset="0%" stop-color="#38bdf8"/>
+                  <stop offset="50%" stop-color="#2563eb"/>
+                  <stop offset="100%" stop-color="#6366f1"/>
+                </linearGradient>
+              </defs>
+              <rect width="40" height="40" rx="12" fill="url(#bankoraGrad)"/>
+              <path d="M20 8L30 13.5V16H10V13.5L20 8Z" fill="white"/>
+              <rect x="12.5" y="18" width="2.8" height="9" rx="1" fill="white" fill-opacity="0.9"/>
+              <rect x="18.6" y="18" width="2.8" height="9" rx="1" fill="white" fill-opacity="0.9"/>
+              <rect x="24.7" y="18" width="2.8" height="9" rx="1" fill="white" fill-opacity="0.9"/>
+              <rect x="9.5" y="29" width="21" height="2.6" rx="1.3" fill="white"/>
+            </svg>
+          </div>
+          <div>
+            <div class="brand-name">BANKORA</div>
+            <div class="brand-sub">CORE BANKING ENGINE</div>
+          </div>
+        </div>
+
+        <nav class="nav-menu">
+          <button class="nav-btn active" data-view="dashboard">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/></svg>
+            <span>Dashboard Overview</span>
+          </button>
+          <button class="nav-btn" data-view="accounts">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+            <span>Accounts Directory</span>
+          </button>
+          <button class="nav-btn" data-view="create">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+            <span>Open New Account</span>
+          </button>
+          <button class="nav-btn" data-view="operations">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+            <span>Transactions & Rules</span>
+          </button>
+          <button class="nav-btn" data-view="ledger">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+            <span>Audit Ledger</span>
+          </button>
+                    <button class="nav-btn" data-view="architecture">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+            <span>C++ OOPS Blueprint</span>
+          </button>
+          <button class="nav-btn hidden" id="navOperatorsBtn" data-view="operators">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>
+            <span>Operator Access</span>
+          </button>
+        </nav>
+      </div>
+
+      <div class="capstone-badge">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+          <span class="badge-tag" style="margin:0;">TREASURY & SECURITY</span>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:10px;">
+          <div style="background:rgba(6,11,22,0.7);padding:7px 8px;border-radius:7px;border:1px solid rgba(56,189,248,0.12);">
+            <div style="font-size:10px;color:#94a3b8;">SAVINGS APY</div>
+            <div style="font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;color:#38bdf8;">4.50%</div>
+          </div>
+          <div style="background:rgba(6,11,22,0.7);padding:7px 8px;border-radius:7px;border:1px solid rgba(16,185,129,0.18);">
+            <div style="font-size:10px;color:#94a3b8;">FD YIELD</div>
+            <div style="font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;color:#10b981;">7.25%</div>
+          </div>
+        </div>
+        <div class="server-pill" id="serverStatus" style="width:100%;justify-content:center;">
+          <span class="pulse-dot"></span> C++ Engine Online
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Workspace -->
+    <main class="main-content">
+      <header class="topbar">
+        <div>
+          <h1 id="pageTitle">Executive Banking Dashboard</h1>
+          <p class="subtitle">Bank Account Inheritance and Polymorphism System</p>
+        </div>
+                <div class="topbar-actions">
+          <span id="sessionRoleBadge" class="pill-code" style="padding:8px 12px;">Guest</span>
+          <button class="btn btn-outline" onclick="switchView('operations')">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/></svg>
+            Execute Transaction
+          </button>
+                    <button class="btn btn-primary" onclick="switchView('create')">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            New Account
+          </button>
+          <button class="btn btn-outline" onclick="logoutSession()" title="Lock Terminal">Lock</button>
+        </div>
+      </header>
+
+      <div id="toastBanner" class="toast hidden"></div>
+
+      <!-- VIEW 1: DASHBOARD -->
+      <section id="view-dashboard" class="view active">
+        <div class="kpi-grid">
+          <div class="glass-card kpi stagger-1">
+            <div class="kpi-top">
+              <span class="kpi-label">Total Bank Liquidity</span>
+              <div class="kpi-icon cyan-bg">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4h12"/><path d="M6 9h12"/><path d="M6 14l8.5 7"/><path d="M6 14h3a5 5 0 0 0 0-10"/></svg>
+              </div>
+            </div>
+            <span class="kpi-value accent-cyan" id="statTotalBalance">Rs. 0.00</span>
+            <span class="kpi-meta" id="statTotalAccounts">0 Active Accounts</span>
+          </div>
+
+          <div class="glass-card kpi stagger-2">
+            <div class="kpi-top">
+              <span class="kpi-label">Cumulative Deposits</span>
+              <div class="kpi-icon green-bg">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+              </div>
+            </div>
+            <span class="kpi-value accent-green" id="statTotalDeposits">Rs. 0.00</span>
+            <span class="kpi-meta">All validated account inflows</span>
+          </div>
+
+          <div class="glass-card kpi stagger-3">
+            <div class="kpi-top">
+              <span class="kpi-label">Cumulative Withdrawals</span>
+              <div class="kpi-icon amber-bg">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2"><polyline points="23 18 13.5 8.5 8.5 13.5 1 6"/><polyline points="17 18 23 18 23 12"/></svg>
+              </div>
+            </div>
+            <span class="kpi-value accent-amber" id="statTotalWithdrawals">Rs. 0.00</span>
+            <span class="kpi-meta">Polymorphic rule validation</span>
+          </div>
+
+          <div class="glass-card kpi stagger-4">
+            <div class="kpi-top">
+              <span class="kpi-label">Account Portfolio Mix</span>
+              <div class="kpi-icon purple-bg">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/></svg>
+              </div>
+            </div>
+            <div class="split-row">
+              <span class="chip chip-sav">SAV <strong id="statSavings">0</strong></span>
+              <span class="chip chip-cur">CUR <strong id="statCurrent">0</strong></span>
+              <span class="chip chip-fd">FD <strong id="statFD">0</strong></span>
+            </div>
+            <span class="kpi-meta">Savings, Current & Fixed Deposit Mix</span>
+          </div>
+        </div>
+
+        <!-- Account Tier Showcase Strip -->
+        <div class="tier-strip">
+          <div class="glass-card tier-card">
+            <div class="tier-header">
+              <span class="tier-badge sav">SAVINGS ACCOUNT</span>
+              <span class="tier-rate">4.50% p.a.</span>
+            </div>
+            <p class="tier-desc">Enforces Rs. 1,000 minimum balance & 3 free monthly withdrawals before Rs. 50 surcharge.</p>
+          </div>
+          <div class="glass-card tier-card">
+            <div class="tier-header">
+              <span class="tier-badge cur">CURRENT ACCOUNT</span>
+              <span class="tier-rate">Rs. 25,000 OD</span>
+            </div>
+            <p class="tier-desc">Commercial checking facility with overdraft protection, Rs. 15 tx fee & Rs. 250 monthly maintenance.</p>
+          </div>
+          <div class="glass-card tier-card">
+            <div class="tier-header">
+              <span class="tier-badge fd">FIXED DEPOSIT</span>
+              <span class="tier-rate">7.25% p.a.</span>
+            </div>
+            <p class="tier-desc">Term-locked capital growth with deposit freeze and 1.50% premature liquidation penalty.</p>
+          </div>
+        </div>
+
+        <div class="dashboard-grid">
+          <div class="glass-card">
+            <div class="card-header">
+              <h3>Hierarchy Distribution</h3>
+              <span class="pill-code">Runtime Dispatch</span>
+            </div>
+            <div class="chart-wrap">
+              <canvas id="accountChart"></canvas>
+            </div>
+          </div>
+
+          <div class="glass-card">
+            <div class="card-header">
+              <h3>Recent Ledger Activity</h3>
+              <button class="btn-link" onclick="switchView('ledger')">View Full Audit →</button>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Tx ID</th>
+                    <th>Account</th>
+                    <th>Type</th>
+                    <th>Amount</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody id="recentTxBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- VIEW 2: ACCOUNTS DIRECTORY -->
+      <section id="view-accounts" class="view">
+        <div class="glass-card">
+          <div class="toolbar">
+            <input type="text" id="searchAccountInput" class="input" placeholder="Search by account number or holder name..." oninput="renderAccountsTable()" />
+            <select id="filterTypeSelect" class="input" onchange="renderAccountsTable()">
+              <option value="ALL">All Account Types</option>
+              <option value="Savings Account">Savings Account</option>
+              <option value="Current Account">Current Account</option>
+              <option value="Fixed Deposit">Fixed Deposit</option>
+            </select>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Account No.</th>
+                  <th>Holder Name</th>
+                  <th>Account Class</th>
+                  <th>Current Balance</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="accountsTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- VIEW 3: CREATE ACCOUNT -->
+      <section id="view-create" class="view">
+        <div class="two-col">
+          <div class="glass-card">
+            <h3>Open New Bank Account</h3>
+            <p class="muted">Instantiates a derived C++ object managed through a polymorphic base pointer.</p>
+            <form id="createAccountForm" class="form-stack">
+              <div class="form-group">
+                <label>Account Holder Full Name</label>
+                <input type="text" id="holderName" class="input" placeholder="e.g., Rohan Verma" required />
+              </div>
+              <div class="form-group">
+                <label>Account Type</label>
+                <select id="accountType" class="input" onchange="updateDynamicFields()">
+                  <option value="SAVINGS">Savings Account (4.5% p.a. | Min Bal Rs. 1,000)</option>
+                  <option value="CURRENT">Current Account (0% Interest | Rs. 25,000 Overdraft)</option>
+                  <option value="FD">Fixed Deposit Account (7.25% p.a. | Lock-in Tenure)</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label id="depositLabel">Initial Deposit Amount (Rs.)</label>
+                <input type="number" id="initialDeposit" class="input" min="1" step="0.01" value="5000" required />
+              </div>
+              <div class="form-group" id="dynamicParamGroup">
+                <label id="dynamicParamLabel">Minimum Balance Requirement (Rs.)</label>
+                <input type="number" id="dynamicParamInput" class="input" value="1000" />
+              </div>
+              <button type="submit" class="btn btn-primary btn-full">Instantiate Account in C++</button>
+            </form>
+          </div>
+
+          <div class="glass-card">
+            <h3>Derived Class Policy Matrix</h3>
+            <div class="rule-block">
+              <h4>SavingsAccount : public BankAccount</h4>
+              <ul>
+                <li>Interest Rate: <strong>4.50% p.a.</strong> (credited monthly via <code>applyInterest()</code>)</li>
+                <li>Minimum Balance: <strong>Rs. 1,000.00</strong> strictly enforced on every withdrawal</li>
+                <li>Withdrawal Quota: 3 free withdrawals/month; Rs. 50.00 fee thereafter</li>
+              </ul>
+            </div>
+            <div class="rule-block">
+              <h4>CurrentAccount : public BankAccount</h4>
+              <ul>
+                <li>Interest Rate: <strong>0.00%</strong> (commercial checking behavior)</li>
+                <li>Overdraft Facility: Up to <strong>Rs. 25,000.00</strong> negative balance permitted</li>
+                <li>Fees: Rs. 15.00 per withdrawal + Rs. 250.00 monthly maintenance fee</li>
+              </ul>
+            </div>
+            <div class="rule-block">
+              <h4>FixedDepositAccount : public BankAccount</h4>
+              <ul>
+                <li>Interest Rate: <strong>7.25% p.a.</strong> across lock-in tenure (min 3 months)</li>
+                <li>Deposit Lock: Subsequent deposits are restricted during active term lock-in</li>
+                <li>Premature Closure: <strong>1.50% penalty</strong> deducted if liquidated before maturity</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- VIEW 4: OPERATIONS & POLYMORPHIC ACTIONS -->
+      <section id="view-operations" class="view">
+        <div class="two-col">
+          <div class="glass-card">
+            <h3>Execute Banking Transaction</h3>
+            <div class="form-stack">
+              <div class="form-group">
+                <label>Select Target Account</label>
+                <select id="opAccountSelect" class="input" onchange="loadSelectedAccountDetails()"></select>
+              </div>
+              <div class="form-group">
+                <label>Transaction Amount (Rs.)</label>
+                <input type="number" id="opAmount" class="input" min="1" step="0.01" placeholder="Enter amount in Rs." />
+              </div>
+              <div class="btn-row">
+                <button class="btn btn-success" onclick="submitTransaction('deposit')">Deposit Funds</button>
+                <button class="btn btn-danger" onclick="submitTransaction('withdraw')">Withdraw Funds</button>
+              </div>
+              <div class="divider"></div>
+              <p class="muted">Invoke Polymorphic Virtual Methods:</p>
+              <div class="btn-row">
+                <button class="btn btn-outline" onclick="submitTransaction('interest')">Credit Monthly Interest</button>
+                <button class="btn btn-outline" onclick="submitTransaction('fee')">Settle Monthly Fee</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="glass-card" id="accountInspectorCard">
+            <h3>Selected Account Summary</h3>
+            <div id="inspectorContent" class="muted">Select an account to inspect live balance and rules.</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- VIEW 5: FULL AUDIT LEDGER -->
+      <section id="view-ledger" class="view">
+        <div class="glass-card">
+          <div class="card-header">
+            <h3>Complete Transaction & Validation Audit Trail</h3>
+            <span class="pill-code">Real-Time C++ Ledger</span>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Transaction ID</th>
+                  <th>Account No.</th>
+                  <th>Type</th>
+                  <th>Amount</th>
+                  <th>Timestamp</th>
+                  <th>Status</th>
+                  <th>Validation Description</th>
+                </tr>
+              </thead>
+              <tbody id="fullLedgerBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- VIEW 6: C++ OOPS ARCHITECTURE BLUEPRINT -->
+      <section id="view-architecture" class="view">
+        <div class="glass-card uml-container">
+          <div class="card-header">
+            <h3>C++17 Inheritance & Runtime Polymorphism Hierarchy</h3>
+            <span class="pill-code">vTable Dynamic Dispatch</span>
+          </div>
+
+          <div class="uml-tree">
+            <div class="uml-base">
+              <div class="uml-tag">ABSTRACT BASE CLASS</div>
+              <h4>BankAccount</h4>
+              <p class="uml-fields"># accountNumber, # holderName, # balance, # transactionHistory</p>
+              <div class="uml-methods">
+                <span>virtual void deposit()</span>
+                <span>virtual void withdraw() = 0</span>
+                <span>virtual double calculateInterest() = 0</span>
+                <span>virtual double applyMonthlyFees() = 0</span>
+                <span>virtual ~BankAccount() = default</span>
+              </div>
+            </div>
+
+            <div class="uml-connectors">
+              <div class="uml-line-vertical"></div>
+              <div class="uml-line-horizontal"></div>
+            </div>
+
+            <div class="uml-derived-grid">
+              <div class="uml-derived sav-border">
+                <div class="uml-tag">DERIVED CLASS</div>
+                <h4>SavingsAccount</h4>
+                <p>4.5% p.a. | Rs. 1,000 Min Bal | 3 Free Withdrawals</p>
+                <code>withdraw() override</code>
+              </div>
+              <div class="uml-derived cur-border">
+                <div class="uml-tag">DERIVED CLASS</div>
+                <h4>CurrentAccount</h4>
+                <p>0% Interest | Rs. 25,000 Overdraft | Rs. 15 Tx Fee</p>
+                <code>withdraw() override</code>
+              </div>
+              <div class="uml-derived fd-border">
+                <div class="uml-tag">DERIVED CLASS</div>
+                <h4>FixedDepositAccount</h4>
+                <p>7.25% p.a. | Deposit Lock | 1.5% Early Penalty</p>
+                <code>deposit() & withdraw() override</code>
+              </div>
+            </div>
+          </div>
+
+          <div class="oops-pillars">
+            <div class="pillar-item">
+              <strong>Encapsulation</strong>
+              <span>Protected balance modified strictly via validated methods.</span>
+            </div>
+            <div class="pillar-item">
+              <strong>Smart Pointers & STL</strong>
+              <span><code>std::unordered_map&lt;string, std::unique_ptr&lt;BankAccount&gt;&gt;</code></span>
+            </div>
+            <div class="pillar-item">
+              <strong>Composition</strong>
+              <span>Each account owns <code>std::vector&lt;Transaction&gt;</code> history.</span>
+            </div>
+            <div class="pillar-item">
+              <strong>Exception Handling</strong>
+              <span>Throws <code>std::runtime_error</code> on rule violation without balance corruption.</span>
+            </div>
+          </div>
+        </div>
+      </section>
+          <!-- VIEW 7: SUPERIOR OFFICER USER REGISTRATION -->
+      <section id="view-operators" class="view">
+        <div class="two-col">
+          <div class="glass-card">
+            <h3>Register New Banking User</h3>
+            <p class="muted">Superior Officer privilege: provision login credentials and role access for staff or customers.</p>
+            <form id="registerOperatorForm" class="form-stack" autocomplete="off">
+              <div class="form-group">
+                <label>Person Full Name</label>
+                <input type="text" id="regFullName" class="input" placeholder="e.g., Ananya Sharma" required />
+              </div>
+              <div class="form-group">
+                <label>Assigned Login Username</label>
+                <input type="text" id="regUsername" class="input" placeholder="e.g., ananya" required />
+              </div>
+              <div class="form-group">
+                <label>Assigned Access Password</label>
+                <input type="text" id="regPassword" autocomplete="off" class="input" placeholder="Create password (min 4 chars)" required />
+              </div>
+              <div class="form-group">
+                <label>Access Role</label>
+                <select id="regRole" class="input">
+                  <option value="CUSTOMER">Customer (Personal Banking Portal)</option>
+                  <option value="BANK_TELLER">Bank Teller (Branch Operations)</option>
+                  <option value="SUPERIOR_OFFICER">Superior Officer (Full Clearance + Delete Rights)</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Superior Officer Authorization PIN <span style="color:#38bdf8;font-family:'JetBrains Mono',monospace;">(PIN: ADMIN2026)</span></label>
+                <input type="password" id="regOfficerPin" class="input" placeholder="Confirm Superior Officer PIN" required />
+              </div>
+              <button type="submit" class="btn btn-primary btn-full">Register User & Issue Password</button>
+            </form>
+          </div>
+
+          <div class="glass-card">
+            <div class="card-header">
+              <h3>Registered System Users</h3>
+              <span class="pill-code">C++ Persistent Registry</span>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Username</th>
+                    <th>Full Name</th>
+                    <th>Assigned Role</th>
+                  </tr>
+                </thead>
+                <tbody id="operatorsTableBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Transaction Receipt Modal -->
+  <div id="receiptModal" class="modal hidden">
+    <div class="modal-card glass-card">
+      <div class="modal-head">
+        <h3>Transaction Confirmation Receipt</h3>
+        <button class="btn-close" onclick="closeReceipt()">×</button>
+      </div>
+      <div id="receiptBody" class="receipt-grid"></div>
+      <button class="btn btn-primary btn-full" onclick="closeReceipt()">Done</button>
+    </div>
+  </div>
+
+    <!-- Superior Officer Authorization Modal -->
+  <div id="officerModal" class="modal hidden">
+    <div class="modal-card glass-card">
+      <div class="modal-head">
+        <div style="display:flex;align-items:center;gap:9px;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          <h3>Superior Officer Clearance</h3>
+        </div>
+        <button class="btn-close" onclick="closeOfficerModal()">x</button>
+      </div>
+      <p class="muted" style="margin-bottom:12px;">Account deletion is restricted to authorized Superior Officers. Account balance must be settled (Rs. 0.00) prior to removal.</p>
+      <form id="officerAuthForm" class="form-stack">
+        <input type="hidden" id="targetDeleteAccNum" />
+        <div class="form-group">
+          <label>Target Account Number</label>
+          <input type="text" id="displayDeleteAccNum" class="input" readonly />
+        </div>
+        <div class="form-group">
+          <label>Superior Officer Badge ID</label>
+          <input type="text" id="officerIdInput" class="input" value="SUP-01" placeholder="e.g., SUP-01" required />
+        </div>
+        <div class="form-group">
+          <label>Authorization Security PIN <span style="color:#38bdf8;font-family:'JetBrains Mono',monospace;">(PIN: ADMIN2026)</span></label>
+          <input type="password" id="officerPinInput" class="input" placeholder="Enter Superior Officer PIN" required />
+        </div>
+        <div class="btn-row" style="margin-top:6px;">
+          <button type="button" class="btn btn-outline" style="flex:1;" onclick="closeOfficerModal()">Cancel</button>
+          <button type="submit" class="btn btn-danger">Authorize & Delete</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
+
+
+
+
+
+
+
