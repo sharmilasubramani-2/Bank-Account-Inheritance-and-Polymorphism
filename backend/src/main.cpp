@@ -1,4 +1,5 @@
-﻿// SHARMILA S / 192525011 | DSA0111 OOPS C++ CAPSTONE | TEAM 16
+﻿#include <cstdlib>
+// SHARMILA S / 192525011 | DSA0111 OOPS C++ CAPSTONE | TEAM 16
 #define _WIN32_WINNT 0x0A00
 #include "../include/httplib.h"
 #include "../include/BankManager.h"
@@ -188,8 +189,11 @@ int main() {
     std::cout << " C++17 Backend Server running at: http://localhost:8080\n";
     std::cout << "=========================================================\n";
 
-    svr.listen("0.0.0.0", 8080);
+        const char* envPort = std::getenv("PORT");
+    int port = envPort ? std::stoi(envPort) : 8080;
+    svr.listen("0.0.0.0", port);
     return 0;
 }
+
 
 
