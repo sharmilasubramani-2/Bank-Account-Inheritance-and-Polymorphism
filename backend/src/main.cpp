@@ -191,9 +191,16 @@ int main() {
 
         const char* envPort = std::getenv("PORT");
     int port = envPort ? std::stoi(envPort) : 8080;
-    svr.listen("0.0.0.0", port);
+    const char* envPort = std::getenv("PORT");
+    int serverPort = (envPort && *envPort) ? std::stoi(envPort) : 8080;
+    std::cout << "Binding BANKORA C++17 Server on 0.0.0.0:" << serverPort << std::endl;
+    if (!svr.listen("0.0.0.0", serverPort)) {
+        std::cerr << "Failed to bind port " << serverPort << std::endl;
+        return 1;
+    }
     return 0;
 }
+
 
 
 
